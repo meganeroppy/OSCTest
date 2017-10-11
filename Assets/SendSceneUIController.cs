@@ -28,7 +28,7 @@ public class SendSceneUIController : MonoBehaviour
 
 		// 送信クライアント名のセット、IPアドレス、ポート番号は適宜調整
 		// このIPアドレスとポート番号は受信側のIPアドレスとポート番号です
-//		m_sender.Init ("TestClient", 8890, IPAddress.Parse ("192.168.3." + Config.ipNum));
+		//		m_sender.Init ("TestClient", 8890, IPAddress.Parse ("192.168.3." + Config.ipNum));
 		IPAddress ipAddress;
 		if( IPAddress.TryParse( ipAddressStr, out ipAddress ) )
 		{
@@ -39,14 +39,16 @@ public class SendSceneUIController : MonoBehaviour
 			Debug.LogError("無効なIPアドレス -> [ " + ipAddressStr + " ]");
 			return;
 		}
+
 		var e = new Slider.SliderEvent ();
 		// Sendメソッドで送信
 		e.AddListener (x => m_sender.Send ("/changeValue", x));
-		slider.onValueChanged = e;			
+		slider.onValueChanged = e;	
 	}
 
 	public void OnClickButton(int id)
 	{
 		Debug.Log(id);
+		m_sender.Send ("/changeValue", id);
 	}
 }
