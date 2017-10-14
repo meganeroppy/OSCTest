@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityOSC;
 
 public class Manager : MonoBehaviour {
@@ -10,7 +11,18 @@ public class Manager : MonoBehaviour {
 	[SerializeField]
 	OSCHandler.Mode mode;
 
+	[SerializeField]
+	string ipAddress = "127.0.0.1";
+
 	public static Dictionary<string, List<object>> values = new Dictionary<string, List<object>>();
+
+	void Awake()
+	{
+		if( mode.Equals( OSCHandler.Mode.Send ) )
+		{
+			OSCHandler.Instance.ipAddress = ipAddress;
+		}
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -90,5 +102,17 @@ public class Manager : MonoBehaviour {
 			// キーが存在したら新しい値で上書き
 			values[ address ] = newValues;
 			}
+	}
+
+	public void SwitchScene()
+	{
+		if( mode.Equals( OSCHandler.Mode.Send ) )
+		{
+			SceneManager.LoadSceneAsync("Receive");
+		}
+		else
+		{
+			SceneManager.LoadSceneAsync("Send");
+		}
 	}
 }

@@ -94,6 +94,9 @@ public class OSCHandler : MonoBehaviour
 		Receive,
 	}
 
+	[HideInInspector]
+	public string ipAddress = "127.0.0.1";
+
 	/// <summary>
 	/// Initializes the OSC Handler.
 	/// Here you can create the OSC servers and clientes.
@@ -105,7 +108,7 @@ public class OSCHandler : MonoBehaviour
 		    //Initialize OSC clients (transmitters)
 		    //Example:		
 			//CreateClient("SuperCollider", IPAddress.Parse("127.0.0.1"), 5555);
-			CreateClient("Yggdra", IPAddress.Parse("127.0.0.1"), 8001);
+			CreateClient("Yggdra", IPAddress.Parse(ipAddress), 8001);
 		}
 		else
 		{
