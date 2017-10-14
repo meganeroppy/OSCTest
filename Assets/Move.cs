@@ -13,7 +13,8 @@ public class Move : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		var val = Input.GetAxis("Horizontal");
-		transform.position += Vector3.right * val * speed;
+		var hor = Input.GetAxis("Horizontal");
+		var ver = Input.GetAxis("Vertical");
+		transform.position += Vector3.right * hor * speed + Vector3.up * ver * speed;
 	}
 }

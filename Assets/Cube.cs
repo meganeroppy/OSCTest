@@ -17,14 +17,25 @@ public class Cube : MonoBehaviour
 			return;
 		}
 
-		foreach( KeyValuePair<string, float> pair in Manager.values )
+		foreach( KeyValuePair<string, List<object>> pair in Manager.values )
 		{
-			if( pair.Key.Contains("positionX") )
+			if( pair.Key.Contains("positionXYZ") )
 			{
+				var fValues = new List<float>();
 				var current = pair.Value;
-				if( current != transform.position.x )
+				for( int i=0 ; i<current.Count ; ++i )
 				{
-					transform.position = Vector3.right * current;
+					float fVal;
+					if( float.TryParse( current[i].ToString(), out fVal ) )
+					{
+						fValues.Add( fVal );
+					}
+				}
+					
+				var newPos = new Vector3( fValues[0], fValues[1], fValues[2] );
+				if( newPos != transform.position )
+				{
+					transform.position = newPos;
 				}
 			}
 		}

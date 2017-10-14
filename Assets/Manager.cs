@@ -10,7 +10,7 @@ public class Manager : MonoBehaviour {
 	[SerializeField]
 	OSCHandler.Mode mode;
 
-	public static Dictionary<string, float> values = new Dictionary<string, float>();
+	public static Dictionary<string, List<object>> values = new Dictionary<string, List<object>>();
 
 	// Use this for initialization
 	void Start () {
@@ -39,16 +39,17 @@ public class Manager : MonoBehaviour {
 	void Send()
 	{
 		//  単一データの送信
-		OSCHandler.Instance.SendMessageToClient("Yggdra", 
-			"/positionX", 
-			transform.position.x );
+		//OSCHandler.Instance.SendMessageToClient("Yggdra", 
+		//	"/positionX", 
+		//	transform.position.x );
+
 		//  複合データの場合は
-		//  List<object> values = new List<object>();
-		//  values.AddRange(new object[]{transform.position.x, 
-		//                               transform.position.y, 
-		//                               transform.position.z });
-		//  OSCHandler.Instance.SendMessageToClient("uniVRtutorial2new", 
-		//                                          "/positionXYZ", values );
+		  List<object> values = new List<object>();
+		  values.AddRange(new object[]{transform.position.x, 
+		                               transform.position.y, 
+		                               transform.position.z });
+		OSCHandler.Instance.SendMessageToClient("Yggdra", 
+		                                          "/positionXYZ", values );
 	}
 
 	void Receive()
@@ -64,10 +65,11 @@ public class Manager : MonoBehaviour {
 					string address = item.Value.packets[i].Address;
 					//  引数（とりあえず最初の引数のみ）
 					var arg0 = item.Value.packets[i].Data[0];
+					var args = item.Value.packets[i].Data;
 					//  処理（とりあえずコンソール出力）
 					Debug.Log(address + ":" + arg0);
 
-					UpdateValues( address, arg0 );
+					UpdateValues( address, args );
 				}
 			}
 		}
@@ -76,24 +78,17 @@ public class Manager : MonoBehaviour {
 	/// <summary>
 	/// OSCクライアントから受け取った値を使ってメンバ変数の値を更新
 	/// </summary>
-	private void UpdateValues( string address, object value )
+	private void UpdateValues( string address, List<object> newValues )
 	{
-		float fValue;
-		if( !float.TryParse( value.ToString(), out fValue ) )
-		{
-			Debug.LogError("Cant parse " + value + " to float");
-			return;
-		}
-
 		if( !values.ContainsKey( address ) )
 		{
 			// キーが存在しなければ追加
-			values.Add( address, fValue );
+			values.Add( address, newValues );
 		}
 		else
 		{
 			// キーが存在したら新しい値で上書き
-			values[ address ] = fValue;
-		}
+			values[ address ] = newValues;
+			}
 	}
 }
