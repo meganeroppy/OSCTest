@@ -24,15 +24,15 @@ public class Manager : MonoBehaviour {
 		if( mode.Equals( OSCHandler.Mode.Send ) )
 		{
 			OSCHandler.Instance.ipAddress = presetIpAddress;
+		
+	        inputField.text = presetIpAddress;
+
+	        // インプットフィールドの値が変更されたときのイベントをセット
+	        inputField.onValueChanged.AddListener( str => {
+	            OSCHandler.Instance.ipAddress = !string.IsNullOrEmpty( str ) ? str : presetIpAddress;
+	            OSCHandler.Instance.Init(mode);
+	        });
 		}
-
-        inputField.text = presetIpAddress;
-
-        // インプットフィールドの値が変更されたときのイベントをセット
-        inputField.onValueChanged.AddListener( str => {
-            OSCHandler.Instance.ipAddress = !string.IsNullOrEmpty( str ) ? str : presetIpAddress;
-            OSCHandler.Instance.Init(mode);
-        });  
 	}
 
 	// Use this for initialization
