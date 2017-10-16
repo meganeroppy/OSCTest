@@ -71,8 +71,11 @@ public class Manager : MonoBehaviour {
 		  values.AddRange(new object[]{transform.position.x, 
 		                               transform.position.y, 
 		                               transform.position.z });
-		OSCHandler.Instance.SendMessageToClient("Yggdra", 
-		                                          "/positionXYZ", values );
+
+		foreach( KeyValuePair<string, ClientLog> client in OSCHandler.Instance.Clients )
+		{
+			OSCHandler.Instance.SendMessageToClient(client.Key, "/positionXYZ", values );
+		}
 	}
 
 	void Receive()
