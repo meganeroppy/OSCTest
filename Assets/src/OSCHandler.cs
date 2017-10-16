@@ -118,7 +118,7 @@ public class OSCHandler : MonoBehaviour
 			//CreateServer("AndroidPhone", 6666);
 			CreateServer("Yggdra_", 8001);
 		}
-		}
+	}
 
     #region Properties
     public Dictionary<string, ClientLog> Clients
