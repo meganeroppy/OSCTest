@@ -17,6 +17,11 @@ public class Manager : MonoBehaviour {
     [SerializeField]
     UnityEngine.UI.InputField[] inputField;
 
+	/// <summary>
+	/// 前回送信した値
+	/// </summary>
+	private Vector3 valuesPrev = Vector3.zero;
+
 	public static Dictionary<string, List<object>> values = new Dictionary<string, List<object>>();
 
 	void Awake()
@@ -54,7 +59,11 @@ public class Manager : MonoBehaviour {
 	{
 		if( mode.Equals( OSCHandler.Mode.Send ) )
 		{
-			Send();
+			if( transform.position != valuesPrev )
+			{
+				Send();
+				valuesPrev = transform.position;
+			}
 		}
 		else
 		{
