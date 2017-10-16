@@ -177,7 +177,13 @@ public class OSCHandler : MonoBehaviour
 		clientitem.client = new OSCClient(destination, port);
 		clientitem.log = new List<string>();
 		clientitem.messages = new List<OSCMessage>();
-		
+
+        if (_clients.ContainsKey(clientId))
+        {
+            var oldVal = _clients[clientId].client.ClientIPAddress;
+            _clients.Remove(clientId);
+            Debug.LogWarning("Update IPAddress : " + oldVal + " -> " + destination);
+        }
 		_clients.Add(clientId, clientitem);
 		
 		// Send test message

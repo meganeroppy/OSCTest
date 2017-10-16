@@ -12,7 +12,10 @@ public class Manager : MonoBehaviour {
 	OSCHandler.Mode mode;
 
 	[SerializeField]
-	string ipAddress = "127.0.0.1";
+	string presetIpAddress = "127.0.0.1";
+
+    [SerializeField]
+    UnityEngine.UI.InputField inputField;
 
 	public static Dictionary<string, List<object>> values = new Dictionary<string, List<object>>();
 
@@ -20,16 +23,24 @@ public class Manager : MonoBehaviour {
 	{
 		if( mode.Equals( OSCHandler.Mode.Send ) )
 		{
-			OSCHandler.Instance.ipAddress = ipAddress;
+			OSCHandler.Instance.ipAddress = presetIpAddress;
 		}
+
+        inputField.text = presetIpAddress;
+
+        // インプットフィールドの値が変更されたときのイベントをセット
+        inputField.onValueChanged.AddListener( str => {
+            OSCHandler.Instance.ipAddress = !string.IsNullOrEmpty( str ) ? str : presetIpAddress;
+            OSCHandler.Instance.Init(mode);
+        });  
 	}
 
 	// Use this for initialization
 	void Start () {
-		//  OSC の初期化（受信開始）
-		OSCHandler.Instance.Init(mode);
+        //  OSC の初期化（受信開始）
+        OSCHandler.Instance.Init(mode);
 
-		if( mode.Equals( OSCHandler.Mode.Receive ) )
+        if ( mode.Equals( OSCHandler.Mode.Receive ) )
 		{
 			lastTimeStamp = -1;
 		}
