@@ -94,30 +94,48 @@ public class OSCHandler : MonoBehaviour
 		Receive,
 	}
 
-	[HideInInspector]
-	public string ipAddress = "127.0.0.1";
+	/// <summary>
+	/// サーバーID基底文字列
+	/// </summary>
+	private const string clientIdBase = "Yggdrasill";
 
 	/// <summary>
-	/// Initializes the OSC Handler.
-	/// Here you can create the OSC servers and clientes.
+	/// IPアドレスを指定してクライアント（送信側）初期化
 	/// </summary>
-	public void Init( Mode mode )
+	public void InitClient( string newIpAddress )
 	{
-		if( mode.Equals( Mode.Send ))
+		// IPアドレスとして有効な文字列かチェック
+		IPAddress result;
+		if( !IPAddress.TryParse( newIpAddress, out result ) )
 		{
-		    //Initialize OSC clients (transmitters)
-		    //Example:		
-			//CreateClient("SuperCollider", IPAddress.Parse("127.0.0.1"), 5555);
-			CreateClient("Yggdra", IPAddress.Parse(ipAddress), 8001);
+			Debug.LogError( newIpAddress + " is invalid for IPAddress." );
+			return;
 		}
-		else
-		{
-		    //Initialize OSC servers (listeners)
-		    //Example:
 
-			//CreateServer("AndroidPhone", 6666);
-			CreateServer("Yggdra_", 8001);
+		// 追加済みのクライアント数でクライアントIDを作成
+		var clientCount = Clients.Count;
+		var clientId = clientIdBase + clientCount.ToString();
+
+		// 重複チェック
+		foreach( KeyValuePair<string, ClientLog> client in Clients)
+		{
+			if( client.Value.client.ClientIPAddress == result )
+			{
+				Debug.LogWarning( "A Client with IPAddress [" + newIpAddress + " is already added. (" + client.Key + ")" );
+				return;
+			}
 		}
+
+		// 作成
+		CreateClient(clientId, IPAddress.Parse(newIpAddress), 8001);
+	}
+
+	/// <summary>
+	/// サーバー（受信側）初期化
+	/// </summary>
+	public void InitServer()
+	{
+		CreateServer("Yggdra_", 8001);
 	}
 
     #region Properties
