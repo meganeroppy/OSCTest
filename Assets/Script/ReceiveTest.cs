@@ -34,7 +34,7 @@ public class ReceiveTest : MonoBehaviour
 
 		lastTimeStamp = -1;
 
-		state = State.Wait;
+		UpdateState( State.Wait ); 
 
 		OSCHandler.Instance.InitServer();
 	}
