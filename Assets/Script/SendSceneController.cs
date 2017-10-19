@@ -7,75 +7,36 @@ using UnityOSC;
 /// <summary>
 /// 送信シーンの制御
 /// </summary>
-public class SendSceneController : MonoBehaviour {
-
-	private long lastTimeStamp;
-
+public class SendSceneController : MonoBehaviour 
+{
 	[SerializeField]
 	string[] presetIpAddress = new string[]{"127.0.0.1"};
 
 	[SerializeField]
 	UnityEngine.UI.InputField[] inputField;
 
-	private const string ClientId = "Yggdra";
-	/*
-	/// <summary>
-	/// ゲーム開始フラグ
-	/// </summary>
-	private bool startFlag = false;
-
-	/// <summary>
-	/// 前回送信したゲーム開始フラグ
-	/// </summary>
-	private bool startFlagPrev = false;
-
-	/// <summary>
-	/// ゲーム強制終了フラグ
-	/// </summary>
-	private bool quitFlag = false;
-
-	/// <summary>
-	/// 前回送信したゲーム強制終了
-	/// </summary>
-	private bool quitFlagPrev = false;
-	*/
-
-	public static Dictionary<string, List<object>> values = new Dictionary<string, List<object>>();
-
 	void Awake()
 	{
-			for( int i=0 ; i < inputField.Length ; ++i )
-			{
-				if( presetIpAddress.Length > i && !string.IsNullOrEmpty(presetIpAddress[i]))
-				{
-					inputField[i].text = presetIpAddress[i];
-
-					OSCHandler.Instance.InitClient( presetIpAddress[i] );
-				}
-				else
-				{
-					inputField[i].text = "";
-				}
-
-				// インプットフィールドの値が変更されたときのイベントをセット
-				inputField[i].onEndEdit.AddListener( str => {
-					OSCHandler.Instance.InitClient(str);
-				});
-			}
-	}
-		
-	/*
-	// Update is called once per frame
-	void Update () 
-	{
-		if( startFlag != startFlagPrev )
+		for( int i=0 ; i < inputField.Length ; ++i )
 		{
-			Send();
-			valuesPrev = transform.position;
+			if( presetIpAddress.Length > i && !string.IsNullOrEmpty(presetIpAddress[i]))
+			{
+				inputField[i].text = presetIpAddress[i];
+
+				OSCHandler.Instance.InitClient( presetIpAddress[i] );
+			}
+			else
+			{
+				inputField[i].text = "";
+			}
+
+			// インプットフィールドの値が変更されたときのイベントをセット
+			inputField[i].onEndEdit.AddListener( str => {
+				OSCHandler.Instance.InitClient(str);
+			});
 		}
 	}
-	*/
-
+		
 	/// <summary>
 	/// ボタンが押された
 	/// </summary>
